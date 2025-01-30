@@ -1,0 +1,16 @@
+# Ignore PostgreSQL database files
+*.sql
+*.dump
+*.backup
+
+# Ignore Docker-related files
+docker-compose.override.yml
+.env
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
