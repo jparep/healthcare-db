@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   db:
-    build: ./dokcer
+    build: ./docker
     container_name: healthcare_db
     restart: always
     env_file:
@@ -13,19 +13,18 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - healthcare_network
-  
+
   adminer:
     image: adminer
-    container_name: healthcare_adminer
     restart: always
     ports:
       - "8080:8080"
     networks:
       - healthcare_network
-  
-  volumes:
-    pgdata:
-  
-  networks:
-    healthcare_network:
-      driver: bridge
+
+volumes:
+  pgdata:
+
+networks:
+  healthcare_network:
+    driver: bridge
