@@ -1,5 +1,5 @@
 # Ignore PostgreSQL database files
-*.sql
+!*.sql
 *.dump
 *.backup
 
