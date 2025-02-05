@@ -1,6 +1,7 @@
 -- 🏥 Create Users Table with RBAC Role
 CREATE TABLE users (
-    user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY, -- Use UUID for scalability & security
+    user_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, -- Fast, Sequential, 8 bytes
+    uuid UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL, -- Use UUID for uniqueness External references, 16 bytes
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
