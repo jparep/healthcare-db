@@ -1,11 +1,18 @@
 import os
-import psycopg2
-import pandas as pd
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv("../docker/.env")
+# Ensure the correct .env path is loaded
+dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../docker/.env"))
+load_dotenv(dotenv_path)
 
+# Debugging: Print values
+print("POSTGRES_DB:", os.getenv("POSTGRES_DB"))
+print("POSTGRES_USER:", os.getenv("POSTGRES_USER"))
+print("POSTGRES_PASSWORD:", os.getenv("POSTGRES_PASSWORD"))
+print("POSTGRES_HOST:", os.getenv("POSTGRES_HOST"))
+print("POSTGRES_PORT:", os.getenv("POSTGRES_PORT"))  # Check if it's None
+
+# Construct the DATABASE_URL
 DATABASE_URL = (
     f"dbname={os.getenv('POSTGRES_DB')} "
     f"user={os.getenv('POSTGRES_USER')} "
@@ -15,23 +22,9 @@ DATABASE_URL = (
     f"sslmode=prefer"
 )
 
-# Connect to PostgreSQL
+print("DATABASE_URL:", DATABASE_URL)  # Debugging line
+
+# Now try connecting to PostgreSQL
+import psycopg2
 conn = psycopg2.connect(DATABASE_URL)
-cur = conn.cursor()
-
-# Function to load CSV into table
-def load_csv_to_db(file_path, table_name, columns):
-    df = pd.read_csv(file_path)
-    insert_query = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))}) ON CONFLICT DO NOTHING;"
-    cur.executemany(insert_query, df.values.tolist())
-    conn.commit()
-
-# Load CSVs into tables
-load_csv_to_db("../data/users.csv", "users", ["user_id", "first_name", "last_name", "email", "password_hash", "role"])
-load_csv_to_db("../data/patients.csv", "patients", ["patient_id", "user_id", "date_of_birth", "gender", "phone", "address"])
-load_csv_to_db("../data/appointments.csv", "appointments", ["appointment_id", "patient_id", "doctor_id", "appointment_date", "status"])
-load_csv_to_db("../data/medical_records.csv", "medical_records", ["record_id", "patient_id", "doctor_id", "diagnosis", "treatment", "created_at"])
-
-cur.close()
-conn.close()
-print("✅ Successfully inserted CSV data into PostgreSQL!")
+print("✅ Connected successfully!")
