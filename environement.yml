@@ -1,0 +1,10 @@
+name: hdb-env
+channels:
+  - conda-forge
+dependencies:
+  - flask=3.1.0
+  - pandas=2.2.3
+  - psycopg2=2.9.9
+  - psycopg2-binary=2.9.9
+  - python=3.11.11
+  - python-dotenv=1.0.1
